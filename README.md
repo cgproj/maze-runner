@@ -1,2 +1,2 @@
-# maze-runner
-Unity with C# survival game
+# MAZE RUNNER
+The project that we want to create is a simple survival game. A player is spawned inside a pre generated maze. The goal of the game is for the player to spend/survive the longest possible time in the maze. There are enemies that spawn in the maze which will seek out the player and will try to catch him in the process. If the player is caught, the game ends and the score is saved based on the amount of time the player has spent in the maze. To provide a player with more options and increase variety we plan to include some special objects scattered around the maze to force players to make more movements. The maze will be based on a square grid system. This will simplify the maze generation procedure as well as enemy pathing, which will be discussed in the further sections.

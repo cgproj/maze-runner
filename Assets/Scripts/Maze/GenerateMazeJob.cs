@@ -3,6 +3,11 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
+
+/*
+ * Job generating the maze for the game. Using burstCompile to increase performance and speed, as well as allow for multithreading. Using the growing three alorigthm
+ */
+
 [BurstCompile]
 public struct GenerateMazeJob : IJob
 {
@@ -10,7 +15,7 @@ public struct GenerateMazeJob : IJob
 
     public int seed;
 
-    public float pickLastProbability, openDeadEndProbability, openArbitraryProbability;
+    public float pickLastProbability, openDeadEndProbability, openOptionalProbability;
 
     public void Execute()
     {
@@ -55,7 +60,7 @@ public struct GenerateMazeJob : IJob
 			{
                 if (pickLast)
                 {
-                    //The last cell was visited, moving the index the the previous last cell
+                    //No further path, backtracking to the previous cell
                     lastActiveIndex -= 1;
                 }
                 else
@@ -77,19 +82,27 @@ public struct GenerateMazeJob : IJob
 			}
 		}
 
+        //Open dead ends
         if (openDeadEndProbability > 0)
         {
             random = OpenDeadEnds(random, scratchpad);
         }
+
+        //Open arbitrary passages
+        if (openOptionalProbability > 0)
+        {
+            random = OpenOptionalPassages(random);
+        }
     }
 
+    //Method checking for aviable passages. We check if the neigbour cells are univsited -> their mask is 0000 and populate them
     int FindAvailablePassages(
         int index, NativeArray<(int, MazeFlags, MazeFlags)> scratchpad
     )
     {
         int2 coordinates = maze.IndexToCoordinates(index);
         int count = 0;
-        if (coordinates.x + 1 < maze.SizeEW)
+        if (coordinates.x + 1 < maze.SizeWidth)
         {
             int i = index + maze.StepE;
             if (maze[i] == MazeFlags.Empty)
@@ -105,7 +118,7 @@ public struct GenerateMazeJob : IJob
                 scratchpad[count++] = (i, MazeFlags.PassageW, MazeFlags.PassageE);
             }
         }
-        if (coordinates.y + 1 < maze.SizeNS)
+        if (coordinates.y + 1 < maze.SizeHeight)
         {
             int i = index + maze.StepN;
             if (maze[i] == MazeFlags.Empty)
@@ -143,17 +156,20 @@ public struct GenerateMazeJob : IJob
         return random;
     }
 
-    Random OpenArbitraryPasssages(Random random)
+    /*
+     * Random chance of opening a closed path
+     */
+    Random OpenOptionalPassages(Random random)
     {
         for (int i = 0; i < maze.Length; i++)
         {
             int2 coordinates = maze.IndexToCoordinates(i);
-            if (coordinates.x > 0 && random.NextFloat() < openArbitraryProbability)
+            if (coordinates.x > 0 && random.NextFloat() < openOptionalProbability)
             {
                 maze.Set(i, MazeFlags.PassageW);
                 maze.Set(i + maze.StepW, MazeFlags.PassageE);
             }
-            if (coordinates.y > 0 && random.NextFloat() < openArbitraryProbability)
+            if (coordinates.y > 0 && random.NextFloat() < openOptionalProbability)
             {
                 maze.Set(i, MazeFlags.PassageS);
                 maze.Set(i + maze.StepS, MazeFlags.PassageN);
@@ -162,13 +178,16 @@ public struct GenerateMazeJob : IJob
         return random;
     }
 
+    /*
+     * If we are at the dead end, we probe for closed pathes and force open them
+     */
     int FindClosedPassages(
         int index, NativeArray<(int, MazeFlags, MazeFlags)> scratchpad, MazeFlags exclude
     )
     {
         int2 coordinates = maze.IndexToCoordinates(index);
         int count = 0;
-        if (exclude != MazeFlags.PassageE && coordinates.x + 1 < maze.SizeEW)
+        if (exclude != MazeFlags.PassageE && coordinates.x + 1 < maze.SizeWidth)
         {
             scratchpad[count++] = (maze.StepE, MazeFlags.PassageE, MazeFlags.PassageW);
         }
@@ -176,7 +195,7 @@ public struct GenerateMazeJob : IJob
         {
             scratchpad[count++] = (maze.StepW, MazeFlags.PassageW, MazeFlags.PassageE);
         }
-        if (exclude != MazeFlags.PassageN && coordinates.y + 1 < maze.SizeNS)
+        if (exclude != MazeFlags.PassageN && coordinates.y + 1 < maze.SizeHeight)
         {
             scratchpad[count++] = (maze.StepN, MazeFlags.PassageN, MazeFlags.PassageS);
         }

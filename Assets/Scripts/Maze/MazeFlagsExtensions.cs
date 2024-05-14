@@ -13,6 +13,7 @@ public static class MazeFlagsExtensions
     public static bool HasNot(this MazeFlags flags, MazeFlags mask) =>
         (flags & mask) != mask;
 
+    //If more then one the most important bit will stay the same so AND will return false
     public static bool HasExactlyOne(this MazeFlags flags) =>
         flags != 0 && (flags & (flags - 1)) == 0;
 

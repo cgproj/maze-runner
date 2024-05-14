@@ -27,7 +27,7 @@ public class Game : MonoBehaviour
     float openDeadEndProbability = 0.5f;
 
     [SerializeField, Range(0f, 1f)]
-    float openArbitraryProbability = 0.5f;
+    float openOptionalProbability = 0.5f;
 
     [SerializeField, Tooltip("Use zero for random seed.")]
     int seed;
@@ -41,14 +41,14 @@ public class Game : MonoBehaviour
         new FindDiagonalPassagesJob
         {
             maze = maze,
-        }.ScheduleParallel(maze.Length, maze.SizeEW, 
+        }.ScheduleParallel(maze.Length, maze.SizeWidth, 
         new GenerateMazeJob
         {
             maze = maze,
             seed = seed != 0 ? seed : Random.Range(1, int.MaxValue),
             pickLastProbability = pickLastProbability,
             openDeadEndProbability = openDeadEndProbability,
-            openArbitraryProbability = openArbitraryProbability
+            openOptionalProbability = openOptionalProbability
         }.Schedule()
         ).Complete();
 

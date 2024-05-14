@@ -13,10 +13,10 @@ public struct Maze
     public int Length => cells.Length;
 
     //Width of maze East - West
-    public int SizeEW => size.x;
+    public int SizeWidth => size.x;
 
     //Height of the maze North - South
-    public int SizeNS => size.y;
+    public int SizeHeight => size.y;
 
     //Step to move to a next "row" - move the whole row to go into the lower one
     public int StepN => size.x;

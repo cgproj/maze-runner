@@ -2,9 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+/*
+ * Pooling for the maze cells. Don't rely understand principles but it was recomended to use it in a general Unity guide :)
+ */
 public class MazeCellObject : MonoBehaviour
 {
-#if UNITY_EDITOR
+    #if UNITY_EDITOR
     static List<Stack<MazeCellObject>> pools;
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
@@ -22,7 +26,7 @@ public class MazeCellObject : MonoBehaviour
             }
         }
     }
-#endif
+    #endif
 
     [System.NonSerialized]
     System.Collections.Generic.Stack<MazeCellObject> pool;
@@ -32,9 +36,9 @@ public class MazeCellObject : MonoBehaviour
         if (pool == null)
         {
             pool = new();
-#if UNITY_EDITOR
+            #if UNITY_EDITOR
             pools.Add(pool);
-#endif
+            #endif
         }
         if (pool.TryPop(out MazeCellObject instance))
         {

@@ -158,9 +158,9 @@ MonoBehaviour:
   mazeSize:
     x: 20
     y: 20
-  pickLastProbability: 0.194
-  openDeadEndProbability: 1
-  openArbitraryProbability: 1
+  pickLastProbability: 0.162
+  openDeadEndProbability: 0.335
+  openOptionalProbability: 0
   seed: 123
 --- !u!4 &194710004
 Transform:
@@ -343,9 +343,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 870515e89830156438fb8372ec1c10b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 6
+  movementSpeed: 4
   rotationSpeed: 180
-  mouseSensitivity: 20
+  mouseSensitivity: 5
   startingVerticalEyeAngle: 10
 --- !u!1 &963194225
 GameObject:

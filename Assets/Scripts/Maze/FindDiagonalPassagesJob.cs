@@ -1,11 +1,15 @@
 using Unity.Burst;
-using Unity.Collections;
 using Unity.Jobs;
 
 [BurstCompile]
 public struct FindDiagonalPassagesJob : IJobFor
 {
     public Maze maze;
+
+    /*
+     * Simple job for finding diagonal passages and removing them. If has a passage to its two neigbours on the same corner,
+     * than we check that cell if it is connected with the reversed walls. If yes, we make the connection diagonal.
+     */
 
     public void Execute(int i)
     {

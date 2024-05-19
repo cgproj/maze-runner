@@ -33,15 +33,17 @@ public class Game : MonoBehaviour
     int seed;
 
     Maze maze;
+    Scent scent;
 
     void Awake()
     {
         maze = new Maze(mazeSize);
+        scent = new Scent(maze);
 
         new FindDiagonalPassagesJob
         {
             maze = maze,
-        }.ScheduleParallel(maze.Length, maze.SizeWidth, 
+        }.ScheduleParallel(maze.Length, maze.SizeWidth,
         new GenerateMazeJob
         {
             maze = maze,
@@ -58,18 +60,17 @@ public class Game : MonoBehaviour
         {
             Random.InitState(seed);
         }
-
         player.StartNewGame(new Vector3(1f, 0f, 1f));
-
     }
 
     void Update()
     {
-        player.Move();
+        scent.Disperse(maze, player.Move());
     }
 
     void OnDestroy()
     {
         maze.Dispose();
+        scent.Dispose();
     }
 }

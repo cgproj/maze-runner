@@ -9,21 +9,21 @@ public struct Maze
 
     int2 size;
 
-    //Width * Height
+    // Width * Height
     public int Length => cells.Length;
 
-    //Width of maze East - West
+    // Width of maze East - West
     public int SizeWidth => size.x;
 
-    //Height of the maze North - South
+    // Height of the maze North - South
     public int SizeHeight => size.y;
 
-    //Step to move to a next "row" - move the whole row to go into the lower one
+    // Step to move to a next "row" - move the whole row to go into the lower one
     public int StepN => size.x;
 
     public int StepE => 1;
 
-    //Step to move to a previous "row" - go back the whole row to go into the upper one
+    // Step to move to a previous "row" - go back the whole row to go into the upper one
     public int StepS => -size.x;
 
     public int StepW => -1;
@@ -71,4 +71,14 @@ public struct Maze
 
     public Vector3 IndexToWorldPosition(int index, float y = 0f) =>
         CoordinatesToWorldPosition(IndexToCoordinates(index), y);
+
+    // New methods for coordinate conversion
+    public int CoordinatesToIndex(int2 coordinates) => coordinates.y * size.x + coordinates.x;
+
+    public int2 WorldPositionToCoordinates(Vector3 position) => new int2(
+        (int)((position.x + size.x) * 0.5f),
+        (int)((position.z + size.y) * 0.5f)
+    );
+
+    public int WorldPositionToIndex(Vector3 position) => CoordinatesToIndex(WorldPositionToCoordinates(position));
 }

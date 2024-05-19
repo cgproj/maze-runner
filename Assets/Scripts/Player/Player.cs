@@ -19,7 +19,19 @@ public class Player : MonoBehaviour
     void Awake()
     {
         characterController = GetComponent<CharacterController>();
-        eye = transform.GetChild(0);
+        if (characterController == null)
+        {
+            Debug.LogError("CharacterController not found on Player.");
+        }
+
+        if (transform.childCount > 0)
+        {
+            eye = transform.GetChild(0);
+        }
+        else
+        {
+            Debug.LogError("Eye (Camera) not found as child of Player.");
+        }
     }
 
 

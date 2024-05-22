@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -16,6 +17,9 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     Player player;
+
+    [SerializeField]
+    Agent[] agents;
 
     [SerializeField]
     int2 mazeSize = int2(20, 20);
@@ -61,11 +65,21 @@ public class Game : MonoBehaviour
             Random.InitState(seed);
         }
         player.StartNewGame(new Vector3(1f, 0f, 1f));
+
+        for (int i = 0; i < agents.Length; i++)
+        {
+            var coordinates = int2(Random.Range(0, mazeSize.x), Random.Range(0, mazeSize.y));
+            agents[i].StartNewGame(maze, coordinates);
+        }
     }
 
     void Update()
     {
-        scent.Disperse(maze, player.Move());
+        NativeArray<float> currentScent = scent.Disperse(maze, player.Move());
+        for (int i = 0; i < agents.Length; i++)
+        {
+            agents[i].Move(currentScent);
+        }
     }
 
     void OnDestroy()

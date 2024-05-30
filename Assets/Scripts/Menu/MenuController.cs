@@ -30,6 +30,19 @@ public class MenuController : MonoBehaviour
 
     public int mainControllerSensitivity = 4;
 
+    //Controls
+
+    //Difficulty
+    [Header("Difficulty Dropdowns")]
+    [SerializeField]
+    private TMP_Dropdown difficultyDropdown;
+
+    [SerializeField]
+    private int defaultDifficulty = 1; // Default to Normal
+    
+    private int _difficultyLevel;
+    private string[] difficultyOptions = { "Easy", "Normal", "Hard" };
+
     [Header("Toggle Settings")]
     [SerializeField]
     private Toggle invertYToggle = null;
@@ -95,6 +108,16 @@ public class MenuController : MonoBehaviour
         resolutionDropdown.AddOptions(options);
         resolutionDropdown.value = currentResolutionIndex;
         resolutionDropdown.RefreshShownValue();
+
+        // Initialize difficulty settings
+        difficultyDropdown.ClearOptions();
+        difficultyDropdown.AddOptions(new List<string>(difficultyOptions));
+
+        // Load saved difficulty setting or use default
+        _difficultyLevel = PlayerPrefs.GetInt("masterDifficulty", defaultDifficulty);
+        difficultyDropdown.value = _difficultyLevel;
+        difficultyDropdown.RefreshShownValue();
+
     }
 
     public void SetResolution(int resolutionIndex)
@@ -145,6 +168,11 @@ public class MenuController : MonoBehaviour
         mainControllerSensitivity = Mathf.RoundToInt(sensitivity);
         controllerSensitivityTextValue.text = sensitivity.ToString("0");
     }
+
+    public void SetDifficulty(int difficultyIndex)
+    {
+        _difficultyLevel = difficultyIndex;
+    }
     
     public void GameplayApply()
     {
@@ -159,6 +187,9 @@ public class MenuController : MonoBehaviour
 
         PlayerPrefs.SetInt("masterSensitivity", mainControllerSensitivity);
         StartCoroutine (ConfirmationBox());
+
+        PlayerPrefs.SetInt("masterDifficulty", _difficultyLevel);
+        StartCoroutine(ConfirmationBox());
     }
 
     public void SetBrightness(float brightness)
@@ -222,7 +253,8 @@ public class MenuController : MonoBehaviour
             mainControllerSensitivity = defaultSensitivity;
             controllerSensitivityTextValue.text = defaultSensitivity.ToString("0");
             invertYToggle.isOn = false;
-            
+            difficultyDropdown.value = defaultDifficulty;
+            _difficultyLevel = defaultDifficulty;
             GameplayApply();
         }
     }

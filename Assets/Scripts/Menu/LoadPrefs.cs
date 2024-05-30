@@ -6,7 +6,7 @@ using TMPro;
 
 public class LoadPrefs : MonoBehaviour
 {
-    [Header ("General Setting")]
+    [Header("General Setting")]
     [SerializeField]
     private bool canUse = false;
     [SerializeField]
@@ -18,29 +18,34 @@ public class LoadPrefs : MonoBehaviour
     [SerializeField]
     private Slider volumeSlider = null;
 
-    [Header ("Brightness Setting")]
+    [Header("Brightness Setting")]
     [SerializeField]
     private Slider brightnessSlider = null;
     [SerializeField]
     private TMP_Text brightnessTextValue = null;
 
-    [Header ("Quality Level Setting")]
+    [Header("Quality Level Setting")]
     [SerializeField]
     private TMP_Dropdown qualityDropdown;
 
-    [Header ("Fullscreen Setting")]
+    [Header("Fullscreen Setting")]
     [SerializeField]
     private Toggle fullScreenMode;
 
-    [Header ("Sensitivity Setting")]
+    [Header("Sensitivity Setting")]
     [SerializeField]
     private TMP_Text controllerSensitivityTextValue = null;
     [SerializeField]
     private Slider controllerSensitivitySliderValue = null;
 
-    [Header ("Invert Y Setting")]
+    [Header("Invert Y Setting")]
     [SerializeField]
     private Toggle invertYToggle = null;
+
+    [Header("Difficulty Settings")]
+    [SerializeField]
+    private TMP_Dropdown difficultyDropdown;
+
 
     private void Awake()
     {
@@ -67,7 +72,7 @@ public class LoadPrefs : MonoBehaviour
             if (PlayerPrefs.HasKey("masterFullScreen"))
             {
                 int localFullScreen = PlayerPrefs.GetInt("masterFullScreen");
-                if(localFullScreen == 1)
+                if (localFullScreen == 1)
                 {
                     Screen.fullScreen = true;
                     fullScreenMode.isOn = true;
@@ -102,7 +107,16 @@ public class LoadPrefs : MonoBehaviour
                     invertYToggle.isOn = false;
                 }
             }
+            if (PlayerPrefs.HasKey("masterDifficulty"))
+            {
+                int localDifficulty = PlayerPrefs.GetInt("masterDifficulty");
+                difficultyDropdown.value = localDifficulty;
+                menuController.SetDifficulty(localDifficulty);
+            }
+            else
+            {
+                menuController.ResetButton("Gameplay");
+            }
         }
     }
-
 }

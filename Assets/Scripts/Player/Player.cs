@@ -5,10 +5,12 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     [SerializeField, Min(0f)]
-    float movementSpeed = 4f, rotationSpeed = 180f, mouseSensitivity = 5f;
+    float baseMovementSpeed = 4f, rotationSpeed = 180f, baseMouseSensitivity = 5f;
 
     [SerializeField]
     float startingVerticalEyeAngle = 10f;
+
+    float movementSpeed, mouseSensitivity;
 
     CharacterController characterController;
 
@@ -32,6 +34,29 @@ public class Player : MonoBehaviour
         {
             Debug.LogError("Eye (Camera) not found as child of Player.");
         }
+
+        // Adjust speed and sensitivity based on difficulty
+        int difficulty = PlayerPrefs.GetInt("masterDifficulty", 1);
+        switch (difficulty)
+        {
+            case 0: // Easy
+                movementSpeed = baseMovementSpeed * 1.25f;
+                mouseSensitivity = baseMouseSensitivity * 1.25f;
+                break;
+            case 1: // Medium
+                movementSpeed = baseMovementSpeed;
+                mouseSensitivity = baseMouseSensitivity;
+                break;
+            case 2: // Hard
+                movementSpeed = baseMovementSpeed * 0.75f;
+                mouseSensitivity = baseMouseSensitivity * 0.75f;
+                break;
+            default:
+                movementSpeed = baseMovementSpeed;
+                mouseSensitivity = baseMouseSensitivity;
+                break;
+        }
+
     }
 
 

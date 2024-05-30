@@ -6,9 +6,11 @@ public class Agent : MonoBehaviour
 {
     [SerializeField]
     Color color = Color.white;
-
+    
     [SerializeField, Min(0f)]
-    float speed = 1f;
+    float baseSpeed = 1f;
+
+    float speed;
 
     Maze maze;
 
@@ -22,6 +24,24 @@ public class Agent : MonoBehaviour
         GetComponent<MeshRenderer>().material.color = color;
         ParticleSystem.MainModule main = GetComponent<ParticleSystem>().main;
         main.startColor = color;
+        
+        // Adjust speed based on difficulty
+        int difficulty = PlayerPrefs.GetInt("masterDifficulty", 1);
+        switch (difficulty)
+        {
+            case 0: // Easy
+                speed = baseSpeed * 0.75f;
+                break;
+            case 1: // Normal
+                speed = baseSpeed;
+                break;
+            case 2: // Hard
+                speed = baseSpeed * 1.5f;
+                break;
+            default:
+                speed = baseSpeed;
+                break;
+        }
     }
 
     public void StartNewGame(Maze maze, int2 coordinates)

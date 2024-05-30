@@ -172,6 +172,8 @@ public class MenuController : MonoBehaviour
     public void SetDifficulty(int difficultyIndex)
     {
         _difficultyLevel = difficultyIndex;
+        PlayerPrefs.SetInt("masterDifficulty", _difficultyLevel);
+        PlayerPrefs.Save();
     }
     
     public void GameplayApply()

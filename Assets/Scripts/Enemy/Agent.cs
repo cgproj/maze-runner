@@ -10,13 +10,23 @@ public class Agent : MonoBehaviour
     [SerializeField, Min(0f)]
     float baseSpeed = 1f;
 
-    float speed;
+    [SerializeField, Min(0f)]
+    float speed = 1f;
+
+    [SerializeField]
+    string triggerMessage;
+
+    [SerializeField]
+    bool isGoal;
+
 
     Maze maze;
 
     int targetIndex;
 
     Vector3 targetPosition;
+
+    public string TriggerMessage => triggerMessage;
 
     void Awake()
     {
@@ -50,6 +60,8 @@ public class Agent : MonoBehaviour
         targetIndex = maze.CoordinatesToIndex(coordinates);
         targetPosition = transform.localPosition = maze.CoordinatesToWorldPosition(coordinates, transform.localPosition.y);
     }
+
+    public void EndGame() => gameObject.SetActive(false);
 
     void Sniff(ref (int, float) trail, NativeArray<float> scent, int indexOffset)
     {

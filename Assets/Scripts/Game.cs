@@ -142,7 +142,7 @@ public class Game : MonoBehaviour
     void EndGame(string message)
     {
         isPlaying = false;
-        displayText.text = message + " Press space to restart of escape to return to main menu";
+        displayText.text = message + " Press space to restart or escape to return to main menu";
         displayText.gameObject.SetActive(true);
         for (int i = 0; i < agents.Length; i++)
         {

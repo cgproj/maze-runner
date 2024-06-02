@@ -3,7 +3,7 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 using static Unity.Mathematics.math;
 using Random = UnityEngine.Random;
 
@@ -112,6 +112,11 @@ public class Game : MonoBehaviour
             StartNewGame();
             UpdateGame();
         }
+        else if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            SceneManager.LoadScene("MainMenu");
+            OnDestroy();
+        }
     }
 
     void UpdateGame()
@@ -137,7 +142,7 @@ public class Game : MonoBehaviour
     void EndGame(string message)
     {
         isPlaying = false;
-        displayText.text = message;
+        displayText.text = message + " Press space to restart of escape to return to main menu";
         displayText.gameObject.SetActive(true);
         for (int i = 0; i < agents.Length; i++)
         {

@@ -19,7 +19,6 @@ public class Agent : MonoBehaviour
     [SerializeField]
     bool isGoal;
 
-
     Maze maze;
 
     int targetIndex;

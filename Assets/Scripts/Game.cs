@@ -39,6 +39,9 @@ public class Game : MonoBehaviour
     [SerializeField]
     TextMeshPro displayText;
 
+    [SerializeField]
+    TextMeshPro timeText;
+
     bool isPlaying;
 
     MazeCellObject[] cellObjects;
@@ -46,10 +49,16 @@ public class Game : MonoBehaviour
     Maze maze;
     Scent scent;
 
+    float startTime;
+
     void StartNewGame()
     {
         isPlaying = true;
         displayText.gameObject.SetActive(false);
+        timeText.gameObject.SetActive(true);
+
+        startTime = Time.time;
+
         maze = new Maze(mazeSize);
         scent = new Scent(maze);
         new FindDiagonalPassagesJob
@@ -106,6 +115,8 @@ public class Game : MonoBehaviour
         if (isPlaying)
         {
             UpdateGame();
+            float elapsedTime = Time.time - startTime;
+            timeText.text = $"Time: {elapsedTime:F2} seconds";
         }
         else if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -142,8 +153,13 @@ public class Game : MonoBehaviour
     void EndGame(string message)
     {
         isPlaying = false;
-        displayText.text = message + " Press space to restart of escape to return to main menu";
+
+        float elapsedTime = Time.time - startTime;
+
+        displayText.text = $"{message} Time: {elapsedTime:F2} seconds. Press space to restart or escape to return to main menu";
         displayText.gameObject.SetActive(true);
+        timeText.gameObject.SetActive(false);
+
         for (int i = 0; i < agents.Length; i++)
         {
             agents[i].EndGame();

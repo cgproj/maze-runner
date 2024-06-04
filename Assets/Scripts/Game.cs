@@ -153,6 +153,7 @@ public class Game : MonoBehaviour
     void EndGame(string message)
     {
         isPlaying = false;
+        displayText.text = message + " Press space to restart or escape to return to main menu";
 
         float elapsedTime = Time.time - startTime;
 

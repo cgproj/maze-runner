@@ -3,11 +3,6 @@ using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 
-
-/*
- * Job generating the maze for the game. Using burstCompile to increase performance and speed, as well as allow for multithreading. Using the growing three alorigthm
- */
-
 [BurstCompile]
 public struct GenerateMazeJob : IJob
 {
@@ -17,88 +12,103 @@ public struct GenerateMazeJob : IJob
 
     public float pickLastProbability, openDeadEndProbability, openOptionalProbability;
 
+    public enum MazeDifficulty
+    {
+        Easy,
+        Medium,
+        Hard
+    }
+
+    public MazeDifficulty difficulty;
+
     public void Execute()
     {
+        AdjustParametersBasedOnDifficulty();
+
         var random = new Random((uint)seed);
-        
-        //Scratchpad - used to store selected paths for a cell and it's selected neighbour
+
         var scratchpad = new NativeArray<(int, MazeFlags, MazeFlags)>(
             4, Allocator.Temp, NativeArrayOptions.UninitializedMemory
         );
 
-        //List of active cells indexes (path)
         var activeIndices = new NativeArray<int>(
             maze.Length, Allocator.Temp, NativeArrayOptions.UninitializedMemory
         );
 
-        //Backtracking indexes for the activeIndices
         int firstActiveIndex = 0, lastActiveIndex = 0;
-
-        //Selecting the starting cell
         activeIndices[firstActiveIndex] = random.NextInt(maze.Length);
 
         while (firstActiveIndex <= lastActiveIndex)
-		{
+        {
             bool pickLast = random.NextFloat() < pickLastProbability;
             int randomActiveIndex, index;
             if (pickLast)
             {
-                //We select the last added cell to the stack
                 randomActiveIndex = 0;
                 index = activeIndices[lastActiveIndex];
             }
             else
             {
-                //We select the random active cell from the stack
                 randomActiveIndex = random.NextInt(firstActiveIndex, lastActiveIndex + 1);
                 index = activeIndices[randomActiveIndex];
             }
 
-            //Locate aviable passages
             int availablePassageCount = FindAvailablePassages(index, scratchpad);
-			if (availablePassageCount <= 1)
-			{
+            if (availablePassageCount <= 1)
+            {
                 if (pickLast)
                 {
-                    //No further path, backtracking to the previous cell
                     lastActiveIndex -= 1;
                 }
                 else
                 {
-                    //Select random cell from active cells list
-                    //Select the first cell from the active cells and set it a the randomActiveIndex
                     activeIndices[randomActiveIndex] = activeIndices[firstActiveIndex++];
                 }
             }
-			if (availablePassageCount > 0)
-			{
-                //Selecting passage from one cell to another if any aviable
-				(int, MazeFlags, MazeFlags) passage =
-					scratchpad[random.NextInt(0, availablePassageCount)];
-				maze.Set(index, passage.Item2);
-				maze[passage.Item1] = passage.Item3;
-                //Set the activeIndices at last inedex to newly created path
-                activeIndices[++lastActiveIndex] = passage.Item1; 
-			}
-		}
+            if (availablePassageCount > 0)
+            {
+                (int, MazeFlags, MazeFlags) passage = scratchpad[random.NextInt(0, availablePassageCount)];
+                maze.Set(index, passage.Item2);
+                maze[passage.Item1] = passage.Item3;
+                activeIndices[++lastActiveIndex] = passage.Item1;
+            }
+        }
 
-        //Open dead ends
         if (openDeadEndProbability > 0)
         {
             random = OpenDeadEnds(random, scratchpad);
         }
 
-        //Open arbitrary passages
         if (openOptionalProbability > 0)
         {
             random = OpenOptionalPassages(random);
         }
     }
 
-    //Method checking for aviable passages. We check if the neigbour cells are univsited -> their mask is 0000 and populate them
-    int FindAvailablePassages(
-        int index, NativeArray<(int, MazeFlags, MazeFlags)> scratchpad
-    )
+    private void AdjustParametersBasedOnDifficulty()
+    {
+        switch (difficulty)
+        {
+            case MazeDifficulty.Easy:
+                pickLastProbability = 0.95f;
+                openDeadEndProbability = 0.4f;
+                openOptionalProbability = 0.3f;
+                break;
+            case MazeDifficulty.Medium:
+                pickLastProbability = 0.75f;
+                openDeadEndProbability = 0.25f;
+                openOptionalProbability = 0.15f;
+                break;
+            case MazeDifficulty.Hard:
+                pickLastProbability = 0.5f;
+                openDeadEndProbability = 0.1f;
+                openOptionalProbability = 0.05f;
+                break;
+        }
+
+    }
+
+    int FindAvailablePassages(int index, NativeArray<(int, MazeFlags, MazeFlags)> scratchpad)
     {
         int2 coordinates = maze.IndexToCoordinates(index);
         int count = 0;
@@ -137,9 +147,7 @@ public struct GenerateMazeJob : IJob
         return count;
     }
 
-    Random OpenDeadEnds(
-        Random random, NativeArray<(int, MazeFlags, MazeFlags)> scratchpad
-    )
+    Random OpenDeadEnds(Random random, NativeArray<(int, MazeFlags, MazeFlags)> scratchpad)
     {
         for (int i = 0; i < maze.Length; i++)
         {
@@ -147,8 +155,7 @@ public struct GenerateMazeJob : IJob
             if (cell.HasExactlyOne() && random.NextFloat() < openDeadEndProbability)
             {
                 int availablePassageCount = FindClosedPassages(i, scratchpad, cell);
-                (int, MazeFlags, MazeFlags) passage =
-                    scratchpad[random.NextInt(0, availablePassageCount)];
+                (int, MazeFlags, MazeFlags) passage = scratchpad[random.NextInt(0, availablePassageCount)];
                 maze[i] = cell.With(passage.Item2);
                 maze.Set(i + passage.Item1, passage.Item3);
             }
@@ -156,9 +163,6 @@ public struct GenerateMazeJob : IJob
         return random;
     }
 
-    /*
-     * Random chance of opening a closed path
-     */
     Random OpenOptionalPassages(Random random)
     {
         for (int i = 0; i < maze.Length; i++)
@@ -178,12 +182,7 @@ public struct GenerateMazeJob : IJob
         return random;
     }
 
-    /*
-     * If we are at the dead end, we probe for closed pathes and force open them
-     */
-    int FindClosedPassages(
-        int index, NativeArray<(int, MazeFlags, MazeFlags)> scratchpad, MazeFlags exclude
-    )
+    int FindClosedPassages(int index, NativeArray<(int, MazeFlags, MazeFlags)> scratchpad, MazeFlags exclude)
     {
         int2 coordinates = maze.IndexToCoordinates(index);
         int count = 0;

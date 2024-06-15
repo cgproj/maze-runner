@@ -164,6 +164,7 @@ MonoBehaviour:
   seed: 123
   displayText: {fileID: 549998103}
   timeText: {fileID: 196840626}
+  backgroundMusic: {fileID: 575369243}
 --- !u!4 &194710004
 Transform:
   m_ObjectHideFlags: 0
@@ -531,6 +532,135 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &575369242
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 575369244}
+  - component: {fileID: 575369243}
+  m_Layer: 0
+  m_Name: BackgrundMusic
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!82 &575369243
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575369242}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 8300000, guid: 62ad10c7d8f5bd54f9def547b5bb9d13, type: 3}
+  m_Resource: {fileID: 8300000, guid: 62ad10c7d8f5bd54f9def547b5bb9d13, type: 3}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!4 &575369244
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575369242}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &699606490
 GameObject:
   m_ObjectHideFlags: 0
@@ -656,18 +786,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1484819159}
     m_Modifications:
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: speed
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: color.r
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1904653213091408544, guid: 40c9947a163a3418a8d9ee294f9d608c, type: 3}
       propertyPath: m_Name
       value: AgentRed
@@ -739,6 +857,18 @@ PrefabInstance:
     - target: {fileID: 2196200014881906742, guid: 40c9947a163a3418a8d9ee294f9d608c, type: 3}
       propertyPath: triggerMessage
       value: You were killed by Red Agent
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: speed
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: color.r
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1016,22 +1146,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1484819159}
     m_Modifications:
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: speed
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: color.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: color.r
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 1904653213091408544, guid: 40c9947a163a3418a8d9ee294f9d608c, type: 3}
       propertyPath: m_Name
       value: AgentGreen
@@ -1103,6 +1217,22 @@ PrefabInstance:
     - target: {fileID: 2196200014881906742, guid: 40c9947a163a3418a8d9ee294f9d608c, type: 3}
       propertyPath: triggerMessage
       value: You were killed by Green agent
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: speed
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: color.r
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1251,58 +1381,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1484819159}
     m_Modifications:
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.a
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key0.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.a
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.b
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.g
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.key1.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: ColorModule.gradient.maxGradient.m_Mode
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: speed
-      value: 2.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
-      propertyPath: color.r
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 1904653213091408544, guid: 40c9947a163a3418a8d9ee294f9d608c, type: 3}
       propertyPath: m_Name
       value: AgentBlue
@@ -1383,6 +1461,58 @@ PrefabInstance:
       propertyPath: triggerMessage
       value: You were killed by Blue agent
       objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key0.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.a
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.key1.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1313892134422272092, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: ColorModule.gradient.maxGradient.m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: speed
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1683077888663687364, guid: e47ed7c6253eb0f488f5e5f333f1bcc2, type: 3}
+      propertyPath: color.r
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1397,3 +1527,4 @@ SceneRoots:
   - {fileID: 1484819159}
   - {fileID: 1198383079}
   - {fileID: 1812074403}
+  - {fileID: 575369244}

@@ -51,6 +51,7 @@ public class Agent : MonoBehaviour
                 speed = baseSpeed;
                 break;
         }
+        gameObject.SetActive(false);
     }
 
     public void StartNewGame(Maze maze, int2 coordinates)
@@ -58,6 +59,7 @@ public class Agent : MonoBehaviour
         this.maze = maze;
         targetIndex = maze.CoordinatesToIndex(coordinates);
         targetPosition = transform.localPosition = maze.CoordinatesToWorldPosition(coordinates, transform.localPosition.y);
+        gameObject.SetActive(true);
     }
 
     public void EndGame() => gameObject.SetActive(false);

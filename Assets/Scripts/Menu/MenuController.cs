@@ -5,6 +5,9 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.Audio;
 using TMPro;
+using Unity.Jobs;
+using Unity.Mathematics;
+using static GenerateMazeJob;
 
 public class MenuController : MonoBehaviour
 {
@@ -86,6 +89,14 @@ public class MenuController : MonoBehaviour
 
     private Resolution[] resolutions;
 
+    // Background Music
+    [Header("Background Music")]
+    [SerializeField]
+    private AudioSource backgroundMusicSource; // Reference to the AudioSource component
+
+    [SerializeField]
+    private AudioClip backgroundMusicClip; // Assign your background music clip in the Unity Editor
+
     public void Start()
     {
         resolutions = Screen.resolutions;
@@ -118,6 +129,18 @@ public class MenuController : MonoBehaviour
         difficultyDropdown.value = _difficultyLevel;
         difficultyDropdown.RefreshShownValue();
 
+        // Ensure the background music source is assigned
+        if (backgroundMusicSource == null)
+        {
+            Debug.LogError("Background Music Source is not assigned in the MenuController.");
+        }
+        else
+        {
+            // Assign the background music clip (you can set this in the Unity Editor as well)
+            backgroundMusicSource.clip = backgroundMusicClip;
+            backgroundMusicSource.loop = true; // Loop the background music
+        }
+
     }
 
     public void SetResolution(int resolutionIndex)
@@ -126,11 +149,36 @@ public class MenuController : MonoBehaviour
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
     }
 
-    public void NewGameDialog_YES() 
+    public void NewGameDialog_YES()
     {
-        SceneManager.LoadScene(_newGameLevel);    
+        // Save the selected difficulty to PlayerPrefs
+        PlayerPrefs.SetInt("masterDifficulty", _difficultyLevel);
+        PlayerPrefs.Save();
+        
+        // Assuming you have a way to create a new maze and pass it to the scene:
+        int2 mazeSize = new int2(10, 10); // Example size, you might have this configurable
+        Maze maze = new Maze(mazeSize);
+
+        // Create and schedule the job
+        GenerateMazeJob generateMazeJob = new GenerateMazeJob
+        {
+            maze = maze,
+            seed = UnityEngine.Random.Range(0, int.MaxValue),
+           
+        };
+
+        // Schedule and complete the job
+        JobHandle handle = generateMazeJob.Schedule();
+        handle.Complete();
+
+        // Pass the generated maze to your game scene here
+        SceneManager.LoadScene(_newGameLevel);
+
+        // Play background music when starting a new game
+        PlayBackgroundMusic();
     }
-   
+
+
     public void LoadGameDialog_YES()
     {
         if (PlayerPrefs.HasKey("SavedLevel"))
@@ -261,10 +309,29 @@ public class MenuController : MonoBehaviour
         }
     }
 
+    private void PlayBackgroundMusic()
+    {
+        if (backgroundMusicSource != null && backgroundMusicClip != null)
+        {
+            if (!backgroundMusicSource.isPlaying)
+            {
+                backgroundMusicSource.clip = backgroundMusicClip; // Assign the audio clip
+                backgroundMusicSource.loop = true; // Ensure the music loops
+                backgroundMusicSource.volume = PlayerPrefs.GetFloat("masterVolume", defaultVolume); // Set volume based on saved settings
+                backgroundMusicSource.Play(); // Start playing the music
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Background Music Source or Clip is not assigned in the MenuController.");
+        }
+    }
+
     public IEnumerator ConfirmationBox()
     {
         confirmationPrompt.SetActive(true);
         yield return new WaitForSeconds(2);
         confirmationPrompt.SetActive(false);
     }
+
 }

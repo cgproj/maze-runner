@@ -25,13 +25,13 @@ public class Game : MonoBehaviour
     int2 mazeSize = int2(20, 20);
 
     [SerializeField, Range(0f, 1f)]
-    float pickLastProbability = 0.5f;
+    float pickLastProbability;
 
     [SerializeField, Range(0f, 1f)]
-    float openDeadEndProbability = 0.5f;
+    float openDeadEndProbability;
 
     [SerializeField, Range(0f, 1f)]
-    float openOptionalProbability = 0.5f;
+    float openOptionalProbability;
 
     [SerializeField, Tooltip("Use zero for random seed.")]
     int seed;
@@ -46,6 +46,11 @@ public class Game : MonoBehaviour
 
     MazeCellObject[] cellObjects;
 
+    [SerializeField] private AudioSource backgroundMusic;
+
+    private int _difficultyLevel;
+    private const int defaultDifficulty = 1;
+
     Maze maze;
     Scent scent;
 
@@ -53,6 +58,14 @@ public class Game : MonoBehaviour
 
     void StartNewGame()
     {
+        LoadDifficultyPreferences();
+
+        // Start playing background music when game starts
+        if (backgroundMusic != null && !backgroundMusic.isPlaying)
+        {
+            backgroundMusic.Play();
+        }
+
         isPlaying = true;
         displayText.gameObject.SetActive(false);
         timeText.gameObject.SetActive(true);
@@ -107,6 +120,34 @@ public class Game : MonoBehaviour
                 }
             }
             agents[i].StartNewGame(maze, coordinates);
+        }
+    }
+
+    void LoadDifficultyPreferences()
+    {
+        _difficultyLevel = PlayerPrefs.GetInt("masterDifficulty", defaultDifficulty);
+
+        // Set maze generation parameters based on difficulty level
+        switch (_difficultyLevel)
+        {
+            case 0: // Easy
+                pickLastProbability = 0.9f;
+                openDeadEndProbability = 0.3f;
+                openOptionalProbability = 0.2f;
+                break;
+            case 1: // Normal
+                pickLastProbability = 0.7f;
+                openDeadEndProbability = 0.2f;
+                openOptionalProbability = 0.1f;
+                break;
+            case 2: // Hard
+                pickLastProbability = 0.5f;
+                openDeadEndProbability = 0.1f;
+                openOptionalProbability = 0.05f;
+                break;
+            default:
+                Debug.LogError($"Unknown difficulty level: {_difficultyLevel}");
+                break;
         }
     }
 

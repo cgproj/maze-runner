@@ -8,6 +8,7 @@ using TMPro;
 using Unity.Jobs;
 using Unity.Mathematics;
 using static GenerateMazeJob;
+using static UnityEngine.InputManagerEntry;
 
 public class MenuController : MonoBehaviour
 {
@@ -96,6 +97,16 @@ public class MenuController : MonoBehaviour
 
     [SerializeField]
     private AudioClip backgroundMusicClip; // Assign your background music clip in the Unity Editor
+    
+    [Header("Button Click Sound")]
+    [SerializeField]
+    private AudioSource buttonClickSource; // Reference to the AudioSource component for button clicks
+
+    [SerializeField]
+    private AudioClip buttonClickClip; // Assign your button click sound clip in the Unity Editor
+
+    // Buttons
+    public Button[] menuButtons;
 
     public void Start()
     {
@@ -141,7 +152,33 @@ public class MenuController : MonoBehaviour
             backgroundMusicSource.loop = true; // Loop the background music
         }
 
-    }
+        if (buttonClickSource == null)
+        {
+            Debug.LogError("Button Click Source is not assigned in the MenuController.");
+        }
+        // Find and assign button click handlers
+        // Add null check for menuButtons array
+        if (menuButtons != null && menuButtons.Length > 0)
+        {
+            // Find and assign button click handlers
+            foreach (Button button in menuButtons)
+            {
+                if (button != null)
+                {
+                    button.onClick.AddListener(PlayButtonClickSound);
+                }
+                else
+                {
+                    Debug.LogWarning("A button in menuButtons array is not assigned.");
+                }
+            }
+        }
+        else
+        {
+            Debug.LogWarning("Menu buttons array is not assigned or empty.");
+        }
+
+}
 
     public void SetResolution(int resolutionIndex)
     {
@@ -306,6 +343,18 @@ public class MenuController : MonoBehaviour
             difficultyDropdown.value = defaultDifficulty;
             _difficultyLevel = defaultDifficulty;
             GameplayApply();
+        }
+    }
+
+    private void PlayButtonClickSound()
+    {
+        if (buttonClickSource != null && buttonClickClip != null)
+        {
+            buttonClickSource.PlayOneShot(buttonClickClip);
+        }
+        else
+        {
+            Debug.LogWarning("Button Click Source or Clip is not assigned in the MenuController.");
         }
     }
 
